@@ -18,7 +18,7 @@ class FGSM(Attack):
         img_max = images.max()
         img_min = images.min()
 
-        if self._targeted:
+        if self.targeted:
             target_labels = self._get_target_label(images, labels)
 
         loss = nn.CrossEntropyLoss()
@@ -27,7 +27,7 @@ class FGSM(Attack):
         outputs = self.model(images)
 
         # Calculate loss
-        if self._targeted:
+        if self.targeted:
             cost = -loss(outputs, target_labels)
         else:
             cost = loss(outputs, labels)
@@ -57,7 +57,7 @@ class PGD(Attack):
         img_max = images.max()
         img_min = images.min()
         
-        if self._targeted:
+        if self.targeted:
             target_labels = self._get_target_label(images, labels)
 
         loss = nn.CrossEntropyLoss()
@@ -74,7 +74,7 @@ class PGD(Attack):
             outputs = self.model(adv_images)
 
             # Calculate loss
-            if self._targeted:
+            if self.targeted:
                 cost = -loss(outputs, target_labels)
             else:
                 cost = loss(outputs, labels)

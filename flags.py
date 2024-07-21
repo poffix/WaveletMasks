@@ -11,13 +11,15 @@ parser.add_argument(
     '--training_data', 
     type=str,
     required=False,
-    default='/mnt/scratch07/datasets/imagenette/train'
+    # default='/mnt/scratch07/datasets/imagenette/train'
+    default='/content/FourierMask/imagenette/train'
 )
 parser.add_argument(
     '--test_data', 
     type=str,
     required=False,
-    default='/mnt/scratch07/datasets/imagenette/val'
+    # default='/mnt/scratch07/datasets/imagenette/val'
+    default='/content/FourierMask/imagenette/val'
 )
 parser.add_argument(
     '--data_stats',

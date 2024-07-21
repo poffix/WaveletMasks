@@ -192,13 +192,13 @@ def main(
     if not os.path.exists(mask_save_folder):
         os.makedirs(mask_save_folder)
         
-    model_paths = glob(pretrained_model_folder + f'/{architecture}*.pt')
+    model_paths = glob(f'/content/FourierMask/' + pretrained_model_folder + f'/{architecture}*.pt')
     if len(model_paths)==0: print('base models have not been trained yet')
     else:    
         for p in model_paths:
             pretrained_model = p
             p = os.path.basename(p).rsplit('_')[-1]
-            save_path = mask_save_folder + f'/{architecture}_mask_' + p
+            save_path = f'/content/FourierMask/' + mask_save_folder + f'/{architecture}_mask_' + p
             if not os.path.exists(save_path):
                 train_mask(
                     architecture, 
@@ -207,7 +207,8 @@ def main(
                     class_portion=args.class_portion,
                     lr=args.mask_lr,
                     schedule=args.mask_schedule,
-                    mask_size=args.img_size,
+                    # mask_size=args.img_size,
+                    mask_size=(128, 128),
                     mask_decay=args.mask_decay,
                     patience=args.mask_patience,
                     seed=args.seed,

@@ -189,9 +189,9 @@ def train_model(
 def main(architecture, model_save_folder):
     if not os.path.exists(model_save_folder):
         os.makedirs(model_save_folder)
-    transforms = ['n', 'adv', 'sn', 'tn', 'rn']
+    transforms = ['n', 'sn', 'tn', 'rn', 'adv']
     for t in transforms:
-        save_path = model_save_folder + f'/{architecture}_basemodel_{t}.pt'
+        save_path = f'/content/FourierMask/' + model_save_folder + f'/{architecture}_basemodel_{t}.pt'
         if not os.path.exists(save_path):
             train_model(
                 architecture, 

@@ -35,7 +35,7 @@ def model_predictions(
     
     # load the model architecture
     model = MaskCore(
-        mask_size=(128, 128), 
+        mask_size=(128,128), 
         num_classes=5, 
         architecture=architecture,
         pretrained_model=pretrained_model
@@ -301,27 +301,34 @@ def main(
             )
             print("Saving Single image Data...")
             torch.save(data, mask_save_folder + f'/{architecture}_single_img_data.pt')
+            
+    if os.path.exists('/content/FourierMask/trained_single_img_masks_ft/resnet_single_img_masks.pt'):
+        single_img_masks = torch.load(
+            '/content/FourierMask/trained_single_img_masks_ft/resnet_single_img_masks.pt', 
+            map_location='cpu')
     
-    masks = torch.zeros(len(data.idx), 1, 1, *args.img_size)
-    adv_trained_masks = torch.zeros(len(data.idx), 1, 1, *args.img_size)
-    adv_attacked_masks = torch.zeros(len(data.idx), 1, 1, *args.img_size)
+    masks = torch.zeros(len(data.idx), 1, 1, 128,128)
+    adv_trained_masks = torch.zeros(len(data.idx), 1, 1, 128,128)
+    adv_attacked_masks = torch.zeros(len(data.idx), 1, 1, 128,128)
     
     final_predictions = torch.zeros(len(data.idx)).long()
     adv_trained_final_predictions = torch.zeros(len(data.idx)).long()
     adv_attacked_final_predictions = torch.zeros(len(data.idx)).long()
     
-    for i in range(len(data.idx)):
+    print(len(data.idx))
+    
+    for i in range(640,len(data.idx)):
         print(f"Iteration {i+1}")
         masks[i], final_predictions[i] = train_single_img_mask(
             img=data.images[i], 
             target=data.predictions[i], 
             m_out=data.standard_model_outs[i], 
             architecture=architecture,
-            pretrained_model=pretrained_model_folder + f'/{architecture}_basemodel_n.pt',
+            pretrained_model= pretrained_model_folder + f'/{architecture}_basemodel_n.pt',
             epochs=args.single_img_mask_epochs,
             lr=args.single_img_mask_lr, 
             schedule=args.single_img_mask_schedule,
-            mask_size=args.img_size,
+            mask_size=(128,128),
             mask_decay=args.single_img_mask_decay, 
             patience=args.single_img_mask_patience, 
             seed=args.seed
@@ -332,11 +339,11 @@ def main(
             target=data.predictions[i], 
             m_out=data.adv_trained_model_outs[i], 
             architecture=architecture,
-            pretrained_model=pretrained_model_folder + f'/{architecture}_basemodel_adv.pt',
+            pretrained_model= pretrained_model_folder + f'/{architecture}_basemodel_adv.pt',
             epochs=args.single_img_mask_epochs,
             lr=args.single_img_mask_lr, 
             schedule=args.single_img_mask_schedule,
-            mask_size=args.img_size,
+            mask_size=(128,128),
             mask_decay=args.single_img_mask_decay, 
             patience=args.single_img_mask_patience, 
             seed=args.seed
@@ -347,11 +354,11 @@ def main(
             target=data.adv_predictions[i], 
             m_out=data.adv_attacked_model_outs[i],
             architecture=architecture,
-            pretrained_model=pretrained_model_folder + f'/{architecture}_basemodel_n.pt',
+            pretrained_model= pretrained_model_folder + f'/{architecture}_basemodel_n.pt',
             epochs=args.single_img_mask_epochs,
             lr=args.single_img_mask_lr, 
             schedule=args.single_img_mask_schedule,
-            mask_size=args.img_size,
+            mask_size=(128,128),
             mask_decay=args.single_img_mask_decay, 
             patience=args.single_img_mask_patience, 
             seed=args.seed
@@ -366,7 +373,9 @@ def main(
             adv_attacked_final_predictions=adv_attacked_final_predictions   
         )
             
-    torch.save(single_img_masks, mask_save_folder + f'/{architecture}_single_img_masks.pt')
+        if i%10 == 0:
+            torch.save(single_img_masks, mask_save_folder + f'/{architecture}_single_img_masks.pt')
+        torch.save(single_img_masks, mask_save_folder + f'/{architecture}_single_img_masks.pt')
 
 if __name__ == "__main__":
     main(

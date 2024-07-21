@@ -128,3 +128,37 @@ def get_sectors(num_bands):
     band_intensities = np.linspace(0, 1, num_bands)
     radial_masks, angular_masks = bandmasks(num_bands, band_intensities)
     return sum(radial_masks), sum(angular_masks)
+
+def aux(i, ii, LL, LH, HL, HH):
+    s = i%2 + ii%2
+    if s == 0:
+        r = LL[0,0,int(i/2),int(ii/2)]
+    elif s == 2:
+        r = HH[0,0,int(i/2),int(ii/2)]
+    elif i%2 == 0:
+        r = LH[0,0,int(i/2),int(ii/2)]
+    else:
+        r = HL[0,0,int(i/2),int(ii/2)]
+    return r
+
+def comb2(LL, LH, HL, HH):
+    # combines four matrices (equal in size) in a single matrix by distributing the elements 
+    # at the same coordinates in a square (e.g. the four elements at coordinates 
+    # (0,0) will be placed in (0,0), (0,1), (1,0) and (1,1)).
+    return np.array([[aux(i,ii, LL, LH, HL, HH) for ii in range(LL.shape[2]*2)]for i in range(LL.shape[3]*2)]).reshape((1,1,128,128))
+    
+def decompose(x):
+    # does the opposite of function 'comb2'
+    LL = np.empty((1,1,64,64), dtype=np.float32)
+    LH = np.empty((1,1,64,64), dtype=np.float32)
+    HL = np.empty((1,1,64,64), dtype=np.float32)
+    HH = np.empty((1,1,64,64), dtype=np.float32)
+    
+    for i in range(LL.shape[2]):
+        for ii in range(LL.shape[3]):
+            LL[0,0,i,ii] = x[0,0,i*2,ii*2]
+            LH[0,0,i,ii] = x[0,0,i*2,ii*2+1]
+            HL[0,0,i,ii] = x[0,0,i*2+1,ii*2]
+            HH[0,0,i,ii] = x[0,0,i*2+1,ii*2+1]
+            
+    return (LL, LH, HL, HH)

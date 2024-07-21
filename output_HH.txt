@@ -1,0 +1,13 @@
+!python /content/FourierMask/train_masks.py --architecture=resnet --model_save_folder=trained_models --mask_save_folder=trained_masks_wt_HH
+Getting Symmetry Invariance Targets
+1973it [13:49,  2.38it/s]
+Invariance: 0.011 - Sparsity: 0.00% - Init Accuracy: 88.39% - Masked Accuracy: 88.14% - Count: 6:  11% 11/100 [43:52<5:54:56, 239.29s/it]
+Getting Symmetry Invariance Targets
+1973it [01:53, 17.44it/s]
+Invariance: 0.008 - Sparsity: 0.00% - Init Accuracy: 87.43% - Masked Accuracy: 87.48% - Count: 6:  11% 11/100 [43:47<5:54:18, 238.86s/it]
+Getting Symmetry Invariance Targets
+1973it [08:40,  3.79it/s]
+Invariance: 0.005 - Sparsity: 0.00% - Init Accuracy: 76.79% - Masked Accuracy: 77.09% - Count: 6:  11% 11/100 [41:47<5:38:10, 227.98s/it]
+Getting Symmetry Invariance Targets
+1973it [01:44, 18.91it/s]
+Invariance: 0.000 - Sparsity: 0.00% - Init Accuracy: 79.98% - Masked Accuracy: 79.93% - Count: 6:  11% 11/100 [41:30<5:35:48, 226.38s/it]
